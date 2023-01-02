@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import cookieSession from "cookie-session";
 import "express-async-errors";
 
-import { NotFoundError } from "./errors/not-found-error";
-import { errorHandler } from "./middlewares/error-handler";
+import { NotFoundError } from "@loki-ticketing/common";
+import { errorHandler } from "@loki-ticketing/common";
 import { currentUserRouter } from "./routes/currentuser";
 import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";

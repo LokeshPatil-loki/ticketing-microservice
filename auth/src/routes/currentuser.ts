@@ -1,5 +1,5 @@
 import express, { Request, response, Response } from "express";
-import { curentUser } from "../middlewares/current-user";
+import { curentUser } from "@loki-ticketing/common";
 
 const router = express.Router();
 
