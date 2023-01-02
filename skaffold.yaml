@@ -16,4 +16,19 @@ build:
         manual:
           - dest: .
             src: 'src/**/*.ts'
-  
+    - image: lokireg.azurecr.io/ticketing-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: '*/**/*.js'
+    - image: lokireg.azurecr.io/ticketing-tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: 'src/**/*.ts'
