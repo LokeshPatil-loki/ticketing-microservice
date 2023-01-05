@@ -5,7 +5,7 @@ it("respond with details about the current user", async () => {
   const email = "test@test.com";
 
   const cookie = await global.signin();
-
+  console.log(cookie);
   const response = await request(app)
     .get("/api/users/currentuser")
     .set("Cookie", cookie)
