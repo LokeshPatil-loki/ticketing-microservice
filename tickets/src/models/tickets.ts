@@ -2,14 +2,14 @@ import mongoose, { mongo } from "mongoose";
 
 // Interface to define what are valid attributes required to create a Ticket Document
 interface TicketAttrs {
-  title: String;
+  title: string;
   price: number;
   userId: string;
 }
 
 // Interface to describe what attrinutes a Ticket Document will have
 interface TicketDoc extends mongoose.Document {
-  title: String;
+  title: string;
   price: number;
   userId: string;
 }
