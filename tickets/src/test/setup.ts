@@ -10,10 +10,13 @@ declare global {
 }
 
 let mongo: any;
+jest.mock("../nats-wrapper");
+
 // JEST lifecyle hook function
 // To intialize test environment
 // Initialize mongodb
 beforeAll(async () => {
+  jest.clearAllMocks();
   process.env.JWT_KEY = "63b2e4ad2e028e90c80c5bb7";
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
@@ -40,7 +43,7 @@ afterAll(async () => {
 });
 
 global.signin = () => {
-  // Build a JWT Payload
+  // Build a JWT Payload3
   const payload = {
     id: getId(),
     email: "test@test.com",

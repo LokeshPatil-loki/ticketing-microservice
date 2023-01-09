@@ -1,6 +1,7 @@
 import { app } from "../../app";
 import request from "supertest";
 import { createTicket, getId } from "../../test/testUtils";
+import { natsWrapper } from "../../nats-wrapper";
 
 it("returns 404 if provided ticket id does not exist", async () => {
   const res = await request(app)
@@ -70,4 +71,20 @@ it("Updates ticket if valid inputs are provide and return 200 with updated ticke
 
   expect(ticket.body.title).toEqual("loki");
   expect(ticket.body.price).toEqual(50);
+});
+
+it("publishes an event", async () => {
+  const cookie = global.signin();
+  const response = await createTicket(cookie);
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set("Cookie", cookie)
+    .send({
+      title: "loki",
+      price: 50,
+    })
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
