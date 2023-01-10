@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
-import { createTicket } from "../../test/testUtils";
+import { createTicket } from "../../../../orders/src/test/testUtils";
 
 it("it can fetch a list of ticket", async () => {
   await createTicket();

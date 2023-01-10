@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import request from "supertest";
-import { app } from "../app";
+import { app } from "../../../tickets/src/app";
 
 const createTicket = (cookie?: string[]) => {
   return request(app)

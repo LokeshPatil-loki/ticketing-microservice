@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
-import { getId } from "../../test/testUtils";
+import { getId } from "../../../../orders/src/test/testUtils";
 
 // it("has a route listening to /api/tickets/:id ", async () => {
 //   let response = await request(app).get(`/api/tickets/${getId()}`).send();

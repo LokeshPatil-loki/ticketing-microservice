@@ -1,6 +1,6 @@
 import { app } from "../../app";
 import request from "supertest";
-import { createTicket, getId } from "../../test/testUtils";
+import { createTicket, getId } from "../../../../orders/src/test/testUtils";
 import { natsWrapper } from "../../nats-wrapper";
 
 it("returns 404 if provided ticket id does not exist", async () => {
