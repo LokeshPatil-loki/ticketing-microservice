@@ -11,6 +11,9 @@ import { Router, Request, Response } from "express";
 import mongoose from "mongoose";
 import { Ticket } from "../models/tickets";
 import { Order } from "../models/orders";
+import { natsWrapper } from "../nats-wrapper";
+import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
+
 const EXPIRATION_WINDOW_SECONDS = 15 * 60;
 const router = Router();
 
@@ -57,6 +60,17 @@ router.post(
     await order.save();
 
     // Publish an event saying that an order is created
+    new OrderCreatedPublisher(natsWrapper.client).publish({
+      id: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expiresAt.toISOString(),
+      ticket: {
+        id: ticket.id,
+        price: ticket.price,
+      },
+    });
+
     res.status(201).send(order);
   }
 );

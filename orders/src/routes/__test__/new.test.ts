@@ -4,6 +4,7 @@ import { app } from "../../app";
 import { Order } from "../../models/orders";
 import { Ticket } from "../../models/tickets";
 import { getId } from "../../test/testUtils";
+import { natsWrapper } from "../../nats-wrapper";
 
 it("Returns a error if ticket does not exist", async () => {
   await request(app)
@@ -58,4 +59,22 @@ it("Reserves a ticket", async () => {
   expect(order.length).toEqual(1);
 });
 
-it.todo("emits an order created event");
+it("emits an order created event", async () => {
+  const ticket = Ticket.build({
+    title: "Area 51",
+    price: 66,
+  });
+  await ticket.save();
+
+  let order = await Order.find({});
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signin())
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+  order = await Order.find({});
+  expect(order.length).toEqual(1);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});

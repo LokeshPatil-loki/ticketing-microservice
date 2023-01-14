@@ -2,6 +2,7 @@ import { OrderStatus } from "@loki-ticketing/common";
 import request from "supertest";
 import { app } from "../../app";
 import { Ticket } from "../../models/tickets";
+import { natsWrapper } from "../../nats-wrapper";
 import { getId } from "../../test/testUtils";
 
 const buildTicket = async () => {
@@ -65,4 +66,26 @@ it("Sets order status to cancel", async () => {
   expect(response.body.status).toBe(OrderStatus.Cancelled);
 });
 
-it.todo("Emmit order cancelled event");
+it("Emmit order cancelled event", async () => {
+  const user1 = global.signin();
+
+  const ticket = await buildTicket();
+
+  // Create one order
+  const { body: order } = await request(app)
+    .post("/api/orders")
+    .set("Cookie", user1)
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+
+  const response = await request(app)
+    .delete(`/api/orders/${order.id}`)
+    .set("Cookie", user1)
+    .send({});
+
+  expect(response.status).toEqual(200);
+  expect(response.body.status).toBe(OrderStatus.Cancelled);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});

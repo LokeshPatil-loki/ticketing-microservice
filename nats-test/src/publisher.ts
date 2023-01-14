@@ -15,6 +15,7 @@ stan.on("connect", () => {
     id: "zjkjakwj",
     title: "Loki Event",
     price: 86,
+    userId: "",
   });
   // const data = JSON.stringify({
   //   id: "123",
