@@ -7,6 +7,7 @@ import { getId } from "../../test/testUtils";
 
 const buildTicket = async () => {
   const ticket = Ticket.build({
+    id: getId(),
     title: "Concert",
     price: 40,
   });
