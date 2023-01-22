@@ -1,11 +1,13 @@
 import request from "supertest";
 import { app } from "../../app";
 import { Ticket } from "../../models/tickets";
+import { getId } from "../../test/testUtils";
 
 const buildTicket = async () => {
   const ticket = Ticket.build({
     title: "Concert",
     price: 40,
+    id: getId(),
   });
   await ticket.save();
   return ticket;

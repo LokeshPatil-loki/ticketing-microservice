@@ -1,4 +1,5 @@
 import {
+  BadRequestError,
   curentUser,
   NotAuthorizedError,
   NotFoundError,
@@ -36,6 +37,10 @@ router.put(
       throw new NotAuthorizedError();
     }
 
+    if (ticket.orderId) {
+      throw new BadRequestError("Cannot edit a reserved ticket");
+    }
+
     ticket.set({
       title: title,
       price: price,
@@ -47,6 +52,7 @@ router.put(
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,
+      version: ticket.version,
     });
     res.send(ticket);
   }

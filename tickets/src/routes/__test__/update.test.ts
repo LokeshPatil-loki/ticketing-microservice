@@ -2,6 +2,7 @@ import { app } from "../../app";
 import request from "supertest";
 import { createTicket, getId } from "../../../../orders/src/test/testUtils";
 import { natsWrapper } from "../../nats-wrapper";
+import { Ticket } from "../../models/tickets";
 
 it("returns 404 if provided ticket id does not exist", async () => {
   const res = await request(app)
@@ -87,4 +88,23 @@ it("publishes an event", async () => {
     .expect(200);
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+
+it("rejects update if ticket is reserved", async () => {
+  const cookie = global.signin();
+  const response = await createTicket(cookie);
+
+  const ticket = await Ticket.findById(response.body.id);
+  ticket!.set({ orderId: getId() });
+  await ticket!.save();
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set("Cookie", cookie)
+    .send({
+      title: "loki",
+      price: 50,
+    })
+    .expect(400);
+
+  // expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

@@ -20,6 +20,7 @@ it("Returns a error if ticket is already reserved", async () => {
   const ticket = Ticket.build({
     title: "Area 51",
     price: 66,
+    id: getId(),
   });
   await ticket.save();
 
@@ -44,6 +45,7 @@ it("Reserves a ticket", async () => {
   const ticket = Ticket.build({
     title: "Area 51",
     price: 66,
+    id: getId(),
   });
   await ticket.save();
 
@@ -63,6 +65,7 @@ it("emits an order created event", async () => {
   const ticket = Ticket.build({
     title: "Area 51",
     price: 66,
+    id: getId(),
   });
   await ticket.save();
 

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { OrderStatus } from "@loki-ticketing/common";
 import { TicketDoc } from "./tickets";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 export { OrderStatus };
 
@@ -15,6 +16,7 @@ interface OrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
+  version: number;
   ticket: TicketDoc;
 }
 
@@ -51,6 +53,9 @@ const OrderSchema = new mongoose.Schema(
     },
   }
 );
+
+OrderSchema.set("versionKey", "version");
+OrderSchema.plugin(updateIfCurrentPlugin);
 
 OrderSchema.statics.build = (attr: OrderAttr): OrderDoc => {
   return new Order(attr);
